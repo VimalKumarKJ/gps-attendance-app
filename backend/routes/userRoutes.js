@@ -1,8 +1,27 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken"
+
+import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+router.get("/me", protect, async(req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password")
+    if(!user){
+      res.status(404).json({message: "User not found"})
+    }
+  res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({message: "Server error", error: err.message})
+  }
+
+})
+
+
+
 
 // @route   POST /api/users/register
 // @desc    Register a new user
@@ -52,7 +71,10 @@ router.post("/login", async (req, res) => {
       res.status(404).json({ message: "Invalid user email or password" });
     }
 
-    res.status(200).json({ message: "Logged in successfully!" });
+    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {
+      expiresIn: "1h"
+    })
+    res.status(200).json({ message: "Logged in successfully!", token, user: {id: user._id, username: user.username, email: user.email} });
 
   } catch (error) {
     res.status(500).json({ message: "Server Error:", error: error.message })
