@@ -7,6 +7,9 @@ import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
+// @route   GET /api/users/me
+// @desc    Profile view of logged in user
+// @access  Private
 router.get("/me", protect, async(req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password")

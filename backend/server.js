@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import userRoutes from "./routes/userRoutes.js"
+import attendanceRoutes from "./routes/attendanceRoutes.js"
 
 dotenv.config();
 const app = express();
@@ -17,7 +18,8 @@ app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
-app.use("/api/users", userRoutes)
+app.use("/api/users", userRoutes);
+app.use("/api/attendance", attendanceRoutes)
 
 //Connect DB
 const PORT = process.env.PORT || 5000;
