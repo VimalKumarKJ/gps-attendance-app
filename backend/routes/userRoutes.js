@@ -23,9 +23,6 @@ router.get("/me", protect, async(req, res) => {
 
 })
 
-
-
-
 // @route   POST /api/users/register
 // @desc    Register a new user
 // @access  Public

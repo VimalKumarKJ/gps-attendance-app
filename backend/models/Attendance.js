@@ -11,6 +11,10 @@ const attendanceSchema = new mongoose.Schema(
             type: Date,
             default: Date.now
         },
+        checkOutTime: {
+            type: Date,
+            default: null
+        },
         location: {
             type: {
                 lat: {type: Number},
