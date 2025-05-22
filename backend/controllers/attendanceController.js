@@ -1,5 +1,6 @@
 import Attendance from "../models/Attendance.js";
 
+// POST /check-in
 export const checkIn = async (req, res) => {
   const { lat, lng } = req.body;
 
@@ -23,6 +24,7 @@ export const checkIn = async (req, res) => {
   }
 };
 
+// POST /check-out
 export const checkOut = async (req, res) => {
   try {
     const latestAttendance = await Attendance.findOne({
@@ -44,6 +46,7 @@ export const checkOut = async (req, res) => {
   }
 };
 
+// GET /history
 export const history = async (req, res) => {
   try {
     const query = { userId: req.user.id };
