@@ -1,5 +1,34 @@
 import Attendance from "../models/Attendance.js";
 
+export const getTodayAttendance = async (req, res) => {
+  try {
+    const startOfDay = new Date()
+    startOfDay.setHours(0,0,0,0)
+
+    const endOfDay = new Date()
+    endOfDay.setHours(23,59,59,999)
+
+    const today = Attendance.find({
+      userId: req.user.id,
+      checkInTime: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+
+    }).sort({createdAt: -1});
+
+    if(!today){
+      return res
+        .status(400)
+        .json({ message: "No attendance record found for today" });
+    }
+
+    res.status(201).json(today);
+  } catch (error) {
+     res.status(500).json({ message: "Server Error", error: err });
+  }
+}
+
 // POST /check-in
 export const checkIn = async (req, res) => {
   const { lat, lng } = req.body;
